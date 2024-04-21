@@ -1,5 +1,5 @@
-import app from "./index.js";
-import { connectDB } from "./config/db.js";
+import app from "./backend/app.js";
+import { connectDB } from "./backend/config/db.js";
 
 const serverStart = app.listen(3000, async (err) => {
   if (err) {

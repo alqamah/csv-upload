@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSV File Uploader</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>CSV File Uploader</h1>
+  </header>
+
+  <main>
+    <section>
+      <h2>Upload CSV File</h2>
+      <form id="csvUploadForm" enctype="multipart/form-data">
+        <input type="file" id="csvFileInput" name="csvFile" accept=".csv" required>
+        <button type="submit">Upload</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Uploaded Files</h2>
+      <ul id="uploadedFilesList"></ul>
+    </section>
+
+    <section>
+      <h2>Data Table</h2>
+      <div>
+        <input type="text" id="searchInput" placeholder="Search...">
+      </div>
+      <table id="dataTable">
+        <thead>
+          <tr id="tableHeaders"></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div id="paginationControls"></div>
+    </section>
+
+    <section id="chartContainer"></section>
+  </main>
+
+  <script src="js/csvUpload.js"></script>
+  <script src="js/dataTable.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/sort.js"></script>
+  <script src="js/pagination.js"></script>
+  <script src="js/charting.js"></script>
+</body>
+</html>
