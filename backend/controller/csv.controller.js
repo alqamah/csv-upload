@@ -13,7 +13,7 @@ export default class csvController {
             console.log(`Filename: ${filename},path: ${path},size: ${size}`);
             const newUpload = new this.upload({ filename, path, size });
             await newUpload.save();
-            console.log("file uploaded successfully");
+            console.log("File uploaded successfully");
             res.status(200).send("File uploaded successfully");
         } catch (error) {
             console.log(error);
