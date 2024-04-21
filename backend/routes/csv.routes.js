@@ -3,6 +3,7 @@ import multer from 'multer';
 import csvController from '../controller/csv.controller.js';
 import { storage } from '../config/upload.middleware.js';
 
+
 const router = express.Router();
 const controller = new csvController();
 
@@ -35,7 +36,16 @@ router.post('/upload', upload.single('csvFile'), (req, res) => {
 //Route for handling delete event
 router.delete('/delete/', async (req, res) => {
   controller.deleteFile(req, res);
-  //res.redirect('/home');
+});
+
+// Route to view the CSV file
+router.get('/view/', async (req, res) => {
+  const id = req.query.id; // Access 'id' from query parameters
+  //console.log(`Extracted id: ${id}`);
+  if (!id) {
+    return res.status(400).send('Missing id parameter');
+  }
+  controller.readFile(req, res);
 });
   
 

@@ -11,20 +11,20 @@
     <h1 class="text-center mb-4">CSV File Uploader</h1>
     <div class="row">
       <div class="col-md-6 mx-auto">
-        <div class="card">
+        <div class="card shadow border-light">
           <div class="card-body">
             <h5 class="card-title">Upload CSV File</h5>
             <form id="csvUploadForm" enctype="multipart/form-data">
               <div class="mb-3">
                 <input class="form-control" type="file" id="csvFileInput" name="csvFile" accept=".csv" required>
               </div>
-              <button type="submit" class="btn btn-primary">Upload</button>
+              <button type="submit" class="btn btn-outline-primary">Upload</button>
             </form>
           </div>
         </div>
       </div>
     </div>
-    <div class="row mt-5">
+    <div id="upload-section" class="row mt-5">
       <div class="col-md-8 mx-auto">
         <div class="card">
           <div class="card-body">

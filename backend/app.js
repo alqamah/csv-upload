@@ -22,5 +22,10 @@ app.get('/', (req, res) => {
   console.log('sending index.html file');
   res.sendFile(path.join(__dirname, './frontend/index.html'));
 });
+app.get('/view', (req, res) => {
+  console.log('sending view.html file');
+  res.sendFile(path.join(__dirname, './frontend/view.html'));
+});
+
 
 export default app;

@@ -1,6 +1,7 @@
 import { Upload } from "../model/csv.model.js";
 import fs from "fs";
 import path from "path";
+import csv from "csv-parser";
 
 export default class csvController {
   constructor() {
@@ -59,6 +60,25 @@ export default class csvController {
     }catch (error) {
       console.error(error);
       res.status(400).send('Error deleting file');
+    }
+  }
+
+  async readFile(req, res) {
+    const id = req.query.id;
+    try {
+      const file = await Upload.findById(id);
+      const filePath = path.join(file.path);
+      const csvData = [];
+  
+      fs.createReadStream(filePath)
+        .pipe(csv())
+        .on('data', (data) => csvData.push(data))
+        .on('end', () => {
+          res.json(csvData);
+        });
+    } catch (error) {
+      console.error('Error reading CSV file:', error);
+      res.status(500).json({ error: 'Error reading CSV file' });
     }
   }
 }

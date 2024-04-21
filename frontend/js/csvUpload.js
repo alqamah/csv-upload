@@ -31,7 +31,12 @@ async function fetchUploadedFiles() {
     //console.log('Fetching uploaded files...');
     const response = await fetch('/home', { method: 'GET' });
     const files = await response.json();
+    if(files.length==0){
+      document.getElementById('upload-section').style.display = 'none';
+      return;
+    }
     console.log('Files fetched:', files);
+    document.getElementById('upload-section').style.display = 'block';
     uploadedFilesList.innerHTML = '';
     files.forEach(file => {
       const row = document.createElement('tr');
@@ -45,7 +50,7 @@ async function fetchUploadedFiles() {
       const viewButton = document.createElement('button');
       viewButton.textContent = 'View';
       viewButton.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-      viewButton.addEventListener('click', () => viewFile(file.path));
+      viewButton.addEventListener('click', () => viewFile(file._id));
       actionsCell.appendChild(deleteButton);
       actionsCell.appendChild(viewButton);
       row.appendChild(filenameCell);
@@ -77,9 +82,10 @@ async function deleteFile(fileId) {
   }
 }
 
-function viewFile(filePath) {
-  // Add your code here to open or display the file at the given filePath
-  console.log(`Opening file at path: ${filePath}`);
+function viewFile(fileId) {
+  const url = `view/?id=${fileId}`;
+  window.open(url);
+  console.log(`Opening file with id: ${fileId}`);
 }
 
 fetchUploadedFiles();
