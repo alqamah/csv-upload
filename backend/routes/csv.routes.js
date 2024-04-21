@@ -1,19 +1,31 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import csvController from '../controller/csv.controller';
+import csvController from '../controller/csv.controller.js';
 
 const router = express.Router();
 
-//config of multer for file-storage
-const upload = multer({ 
-    dest: 'uploads/', // Directory for uploaded files
+// Configure Multer storage
+const storage = multer.diskStorage({
+    destination: 'uploads/', // Directory for uploaded files
     filename: (req, file, cb) => {
-        cb(null, file.originalname);
+      // Use the original filename
+      cb(null, file.originalname);
     }
-}); 
+  });
 
+//config of multer for file-storage
+const upload = multer({storage: storage}); // Directory for uploaded files
+const controller = new csvController();
 // Route for handling file uploads
-router.post('/upload', upload.single('csvFile'), csvController.uploadCSV);
+router.post('/', upload.single('csvFile'), (req, res) => {
+    if (!req.file) {
+      console.error('No file uploaded');
+      return res.status(400).send('No file uploaded');
+    }
+  
+    console.log('File received:', req.file);
+    controller.uploadCsv(req, res);
+  });
 
 export default router;

@@ -9,9 +9,8 @@ form.addEventListener('submit', async (event) => {
   if (file) {
     const formData = new FormData();
     formData.append('csvFile', file);
-
     try {
-      const response = await fetch('/upload', {
+      const response = await fetch('/', {
         method: 'POST',
         body: formData
       });
