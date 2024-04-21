@@ -11,10 +11,10 @@ const upload = multer({ storage: storage });
 
 // Route for fetching the list of uploaded files
 router.get('/home', async (req, res) => {
-  console.log('Fetching uploaded files...');
+  //console.log('Fetching uploaded files...');
   try {
     const files = await controller.getUploadedFiles(req,res);
-    console.log('Files fetched:', files);
+    //console.log('Files fetched:', files);
     res.json(files);
   } catch (error) {
     console.log('Error fetching uploaded files:', error);
@@ -24,14 +24,20 @@ router.get('/home', async (req, res) => {
 
 
 // Route for handling file uploads
-router.post('/', upload.single('csvFile'), (req, res, next) => {
+router.post('/upload', upload.single('csvFile'), (req, res) => {
   if (!req.file) {
     console.error('No file uploaded');
     return res.status(400).send('No file uploaded');
   }
   controller.uploadCsv(req, res);
-  next();
 });
+
+//Route for handling delete event
+router.delete('/delete/', async (req, res) => {
+  controller.deleteFile(req, res);
+  //res.redirect('/home');
+});
+  
 
 
 export default router;

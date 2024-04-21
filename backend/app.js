@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Use the csvRouter for handling CSV-related routes
 app.use('/',(req,res,next)=>{
-  console.log('Request received at /',req.url, req.method);
+  //console.log('Request received at /',req.url, req.method);
   next();
 },csvRouter);
 
