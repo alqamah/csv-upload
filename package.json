@@ -2,7 +2,7 @@
   "name": "csv-upload",
   "version": "1.0.0",
   "description": "coding ninjas backend project",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,10 +17,16 @@
     "csv-upload",
     "mongodb"
   ],
+  "type": "module",
   "author": "alqama hasnain",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/alqamah/csv-upload/issues"
   },
-  "homepage": "https://github.com/alqamah/csv-upload#readme"
+  "homepage": "https://github.com/alqamah/csv-upload#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.3.2",
+    "nodemon": "^3.1.0"
+  }
 }
