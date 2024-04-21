@@ -1,0 +1,26 @@
+{
+  "name": "csv-upload",
+  "version": "1.0.0",
+  "description": "coding ninjas backend project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alqamah/csv-upload.git"
+  },
+  "keywords": [
+    "nodejs",
+    "multer",
+    "express",
+    "csv-upload",
+    "mongodb"
+  ],
+  "author": "alqama hasnain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alqamah/csv-upload/issues"
+  },
+  "homepage": "https://github.com/alqamah/csv-upload#readme"
+}
