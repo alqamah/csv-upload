@@ -28,21 +28,9 @@
   </div>
 
   <script>
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const id = urlParams.get('id');
+    const csvData = <%- JSON.stringify(csvData) %>;
 
-    if (!id) {
-      console.error('Missing id parameter');
-      return;
-    }
-
-    fetch(`/view/?id=${id}`)
-      .then(response => response.json())
-      .then(data => {
-        renderCsvData(data);
-      })
-      .catch(error => console.error('Error fetching CSV data:', error));
+    renderCsvData(csvData);
 
     function renderCsvData(data) {
       const tableHeaders = document.getElementById('tableHeaders');
@@ -68,21 +56,41 @@
 
       // Render table headers
       const headerRow = document.createElement('tr');
-      keys.forEach(key => {
+      const firstHeaderCell = document.createElement('th');
+      firstHeaderCell.textContent = keys[0];
+      firstHeaderCell.rowSpan = 2; // Span across two rows
+      headerRow.appendChild(firstHeaderCell);
+
+      for (let i = 1; i < keys.length; i++) {
         const th = document.createElement('th');
-        th.textContent = key;
+        th.textContent = keys[i];
         headerRow.appendChild(th);
-      });
+      }
       tableHeaders.appendChild(headerRow);
+
+      // Render second row of headers (for merged cells)
+      const secondHeaderRow = document.createElement('tr');
+      const firstCellValues = data[0][keys[0]].split(' ');
+      for (let i = 1; i < firstCellValues.length; i++) {
+        const th = document.createElement('th');
+        th.textContent = firstCellValues[i];
+        secondHeaderRow.appendChild(th);
+      }
+      tableHeaders.appendChild(secondHeaderRow);
 
       // Render table data
       data.forEach(row => {
         const dataRow = document.createElement('tr');
-        keys.forEach(key => {
+        const firstDataCell = document.createElement('td');
+        firstDataCell.textContent = row[keys[0]];
+        firstDataCell.rowSpan = 2; // Span across two rows
+        dataRow.appendChild(firstDataCell);
+
+        for (let i = 1; i < keys.length; i++) {
           const td = document.createElement('td');
-          td.textContent = row[key];
+          td.textContent = row[keys[i]];
           dataRow.appendChild(td);
-        });
+        }
         tableBody.appendChild(dataRow);
       });
     }

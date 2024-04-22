@@ -63,18 +63,39 @@ export default class csvController {
     }
   }
 
+
   async readFile(req, res) {
     const id = req.query.id;
     try {
       const file = await Upload.findById(id);
       const filePath = path.join(file.path);
       const csvData = [];
+      const tableHeaders = [];
+      const tableRows = [];
   
       fs.createReadStream(filePath)
         .pipe(csv())
-        .on('data', (data) => csvData.push(data))
+        .on('data', (data) => {
+          csvData.push(data);
+          if (tableHeaders.length === 0) {
+            tableHeaders.push(...Object.keys(data));
+          } else {
+            const row = [];
+            for (const header of tableHeaders) {
+              row.push(data[header]);
+            }
+            tableRows.push(row);
+          }
+        })
         .on('end', () => {
-          res.json(csvData);
+          res.render('view.ejs', {
+            title: file.originalname, // Set the title to the original filename
+            file: file, // Pass the file object
+            searchQuery: req.query.q || '', // Pass the search query from the request
+            tableHeaders: tableHeaders, // Pass the table headers
+            tableRows: tableRows, // Pass the table rows
+            csvData: csvData, // Pass the CSV data
+          });
         });
     } catch (error) {
       console.error('Error reading CSV file:', error);
