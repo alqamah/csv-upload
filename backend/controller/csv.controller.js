@@ -2,6 +2,7 @@ import { Upload } from "../model/csv.model.js";
 import fs from "fs";
 import path from "path";
 import csv from "csv-parser";
+import { title } from "process";
 
 export default class csvController {
   constructor() {
@@ -65,41 +66,56 @@ export default class csvController {
 
 
   async readFile(req, res) {
-    const id = req.query.id;
-    try {
+    try{
+      //console.log('Reading file...');
+      const id = req.query.id;
+      const searchQuery = req.query.q; // Get the search query from the URL query parameters
       const file = await Upload.findById(id);
+      //console.log('File found:', file);
+      if(!file){
+        return res.status(404).send('File not found');
+      }
       const filePath = path.join(file.path);
-      const csvData = [];
-      const tableHeaders = [];
-      const tableRows = [];
-  
+      const results = [];
       fs.createReadStream(filePath)
-        .pipe(csv())
-        .on('data', (data) => {
-          csvData.push(data);
-          if (tableHeaders.length === 0) {
-            tableHeaders.push(...Object.keys(data));
-          } else {
-            const row = [];
-            for (const header of tableHeaders) {
-              row.push(data[header]);
+          .pipe(csv())
+          .on("data", (data) => {
+            results.push(data);
+          })
+          .on("end", () => {
+            if (results.length === 0) {
+              return res.status(404).send("No data found in the CSV file");
             }
-            tableRows.push(row);
-          }
-        })
-        .on('end', () => {
-          res.render('view.ejs', {
-            title: file.originalname, // Set the title to the original filename
-            file: file, // Pass the file object
-            searchQuery: req.query.q || '', // Pass the search query from the request
-            tableHeaders: tableHeaders, // Pass the table headers
-            tableRows: tableRows, // Pass the table rows
-            csvData: csvData, // Pass the CSV data
+  
+            const tableHeaders = Object.keys(results[0]);
+            let tableRows = results;
+  
+            if (searchQuery) {
+              // Filter the tableRows based on the search query
+              tableRows = tableRows.filter((row) =>
+                Object.values(row).some((value) =>
+                  value.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+              );
+            }
+            res.render('view.ejs', {
+              title: file.filename, // Set the title to the original filename
+              file: file, // Pass the file object
+              searchQuery: req.query.q || '', // Pass the search query from the request
+              tableHeaders: tableHeaders, // Pass the table headers
+              tableRows: tableRows, // Pass the table rows
+              csvData: results, // Pass the CSV data
+            });
+          })
+          .on("error", (error) => {
+            console.error("CSV parsing error:", error);
+            res.status(500).send("Error parsing CSV file");
           });
-        });
-    } catch (error) {
-      console.error('Error reading CSV file:', error);
-      res.status(500).json({ error: 'Error reading CSV file' });
+
+
+    }catch(error){
+      console.error(error);
+      res.status(400).send('Error reading file');
     }
   }
 }
