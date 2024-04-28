@@ -6,7 +6,6 @@ const serverStart = app.listen(3000, async (err) => {
     console.log(`server failed with error ${err}`);
   } else {
     await connectDB();
-      //console.log(`server is running at http://localhost:3000`);
       console.log(`server is running at http://localhost:3000`);
   }
 });
