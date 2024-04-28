@@ -1,6 +1,7 @@
 const form = document.getElementById('csvUploadForm');
 const uploadedFilesList = document.getElementById('uploadedFilesList');
 
+//handle the upload-file form
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
   const fileInput = document.getElementById('csvFileInput');
@@ -9,7 +10,7 @@ form.addEventListener('submit', async (event) => {
     const formData = new FormData();
     formData.append('csvFile', file);
     try {
-      const response = await fetch('/upload', {
+      const response = await fetch('/upload', { //sending the POST req to the server along with the uploaded file
         method: 'POST',
         body: formData
       });
@@ -26,18 +27,20 @@ form.addEventListener('submit', async (event) => {
   }
 });
 
+//display the list of uploaded files
 async function fetchUploadedFiles() {
   try {
     //console.log('Fetching uploaded files...');
     const response = await fetch('/home', { method: 'GET' });
     const files = await response.json();
-    if(files.length==0){
+    if(files.length==0){ //if no files exist, do not display the file-list headers
       document.getElementById('upload-section').style.display = 'none';
       return;
     }
     console.log('Files fetched:', files);
     document.getElementById('upload-section').style.display = 'block';
     uploadedFilesList.innerHTML = '';
+    //render the list of files
     files.forEach(file => {
       const row = document.createElement('tr');
       const filenameCell = document.createElement('td');
@@ -62,6 +65,7 @@ async function fetchUploadedFiles() {
   }
 }
 
+//handle the deletion of the files
 async function deleteFile(fileId) {
   try{
     console.log(`Deleting file with ID: ${fileId}`);
@@ -82,6 +86,7 @@ async function deleteFile(fileId) {
   }
 }
 
+//send request to view a particular file, along with the file-id in req.query
 function viewFile(fileId) {
   const url = `view/?id=${fileId}`;
   window.open(url);

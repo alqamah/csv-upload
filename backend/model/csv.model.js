@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+//model for the csv-file object
 const uploadSchema = new mongoose.Schema({
   filename: {
     type: String,

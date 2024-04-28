@@ -12,13 +12,11 @@ export default class csvController {
   async uploadCsv(req, res) {
     try {
       if (!req.file) {
-        return res.status(400).send("No file uploaded");
+        return res.status(400).send("No file uploaded"); //check if file exists
       }
-
       //console.log('File received:', req.file);
-
       const { filename, path, size } = req.file;
-      const newUpload = new this.upload({ filename, path, size });
+      const newUpload = new this.upload({ filename, path, size }); //create new csv-file obj model
       await newUpload.save();
 
       console.log("File uploaded successfully");
@@ -34,6 +32,7 @@ export default class csvController {
   async getUploadedFiles() {
     try {
       //console.log('Fetching uploaded files...');
+      //get all the files from the db
       const files = await Upload.find({}, { filename: 1, filePath: 1, size: 1 });
       return files;
     } catch (error) {
@@ -43,12 +42,11 @@ export default class csvController {
 
   async deleteFile(req, res, next) {
     try {
-      const fileId = req.body.fileId;
+      const fileId = req.body.fileId; //get the file-id from the body of response
       const file = await Upload.findById(fileId);
       console.log('Deleting file with id:', fileId);
-      await Upload.findByIdAndDelete(fileId);
-      
-      const filePath = path.join('uploads', file.filename);
+      await Upload.findByIdAndDelete(fileId); //delete the corresponding file from the db
+      const filePath = path.join('uploads', file.filename); //delete the file from the uploads folder
       fs.unlink(filePath, (err) => {
       if (err) {
         console.error('Error deleting file:', err);

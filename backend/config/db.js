@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// connect to the mongo-db
 export const connectDB = async () => {
   try {
     //console.log("db connecting...");

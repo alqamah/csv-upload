@@ -14,7 +14,6 @@ app.set('views', path.join(__dirname, 'backend/views'));
 // Set the view engine to ejs
 app.set('view engine', 'ejs');
 
-
 // Middleware for handling JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
